@@ -17,6 +17,7 @@ This repository contains R-focused workflows, scripts, and examples for using La
   - `evaluation_metrics.R`: Functions for computing agreement (e.g., Cohen's kappa), accuracy, F1, and other metrics.
 - `data/`
   - `README_data.md`: Notes on data formats (CSV), anonymization considerations, and example schemas for media and social media texts.
+  - `example_texts.csv`: Small synthetic dataset of COVID-19 news texts with human labels for quick testing.
 - `examples/`
   - `covid_news_reactions_llm_text_analysis.R`: Example inspired by PhD thesis data (COVID-19 news and Facebook reactions).
   - `annotation_workflow_demo.R`: Demonstrates an LLM-supported coding/annotation workflow for a small text corpus.
@@ -30,9 +31,29 @@ See `data/README_data.md` for more information.
 ## Cross-links to Related Repositories
 
 - LLM API integration with R: [llm-api-research-r](https://github.com/sawoodanwar/llm-api-research-r)
+- BERTopic topic modeling workflows: [bertopic-media-topics](https://github.com/sawoodanwar/bertopic-media-topics)
 - Profile and other research repositories: [GitHub profile](https://github.com/sawoodanwar)
 
-You may add links to specific topic modeling, BERTopic, or thesis repositories as they evolve.
+Together with `llm-api-research-r` and `bertopic-media-topics`, this repository is part of a small computational communication toolkit for LLMs and topic modeling.
+
+## Example Usage
+
+A minimal example of running LLM-based labeling and agreement computation over the synthetic texts:
+
+```r
+library(readr)
+source("R/llm_text_labeling.R")
+source("R/evaluation_metrics.R")
+
+texts <- read_csv("data/example_texts.csv")
+
+# Assume LLM client functions from llm-api-research-r have been sourced
+labeled <- llm_label_texts(texts, text_col = "text", model = "gpt-4.1-mini")
+
+agreement_results <- compute_basic_agreement(labeled)
+print(agreement_results$confusion)
+print(agreement_results$agreement)
+```
 
 ## Getting Started
 
